@@ -1,0 +1,15 @@
+# =====================================================
+# ROBOTS.TXT - VisionPro Refurbishing
+# =====================================================
+
+User-agent: *
+Allow: /
+
+# Disallow admin area
+Disallow: /admin-*
+Disallow: /config/
+Disallow: /includes/
+Disallow: /src/
+
+# Sitemap
+Sitemap: https://visionprorefurbishing.com/sitemap.xml
