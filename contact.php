@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-400 uppercase text-xs tracking-widest mb-1">Email Us</h4>
-                                    <p class="text-lg font-medium">info@visionprolcd.com</p>
+                                    <p class="text-lg font-medium">Visionpro.lcd@gmail.com</p>
                                 </div>
                             </div>
 
@@ -103,9 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-400 uppercase text-xs tracking-widest mb-1">Working Hours</h4>
-                                    <p class="text-md"><span class="w-20 inline-block text-gray-400">Mon - Fri:</span> 10:00 AM - 7:00 PM</p>
-                                    <p class="text-md"><span class="w-20 inline-block text-gray-400">Sat:</span> 11:00 AM - 5:00 PM</p>
-                                    <p class="text-md"><span class="w-20 inline-block text-gray-400">Sun:</span> Closed</p>
+                                    <p class="text-md">Mon - Fri: 9:00 AM - 5:00 PM | Sat - Sun: Closed</p>
                                 </div>
                             </div>
                         </div>
@@ -195,4 +194,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
 

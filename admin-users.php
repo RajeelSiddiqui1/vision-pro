@@ -32,7 +32,8 @@ $users = $stmt->fetchAll();
     <title>Manage Users - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-100 min-h-screen font-sans">
     <div class="flex">
@@ -98,4 +99,5 @@ $users = $stmt->fetchAll();
     </div>
 </body>
 </html>
+
 

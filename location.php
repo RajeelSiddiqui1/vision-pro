@@ -46,9 +46,8 @@ require_once 'config/db.php';
                         Operating Hours
                     </h3>
                     <ul class="space-y-2 text-sm">
-                        <li class="flex justify-between border-b pb-2"><span>Monday - Friday</span> <span class="font-bold">10:00 AM - 7:00 PM</span></li>
-                        <li class="flex justify-between border-b pb-2"><span>Saturday</span> <span class="font-bold">11:00 AM - 5:00 PM</span></li>
-                        <li class="flex justify-between text-gray-400"><span>Sunday</span> <span>Closed</span></li>
+                        <li class="flex justify-between border-b pb-2"><span>Monday - Friday</span> <span class="font-bold">9:00 AM - 5:00 PM</span></li>
+                        <li class="flex justify-between border-b pb-2"><span>Saturday - Sunday</span> <span class="font-bold">Closed</span></li>
                     </ul>
                 </div>
             </div>
@@ -72,4 +71,5 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
 

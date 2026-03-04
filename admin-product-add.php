@@ -176,3 +176,4 @@ $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
 </body>
 </html>
 
+

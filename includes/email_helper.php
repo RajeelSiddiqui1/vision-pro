@@ -205,7 +205,7 @@ function send_password_reset_otp($user_email, $user_name, $otp) {
  * Send contact form submission email to admin
  */
 function send_contact_form($name, $email, $subject, $message) {
-    $admin_email = 'info@visionprolcd.com';
+    $admin_email = 'Visionpro.lcd@gmail.com';
     $full_subject = "Contact Form: $subject";
     
     $body = "
@@ -297,4 +297,5 @@ function send_appointment_cancelled($appointment_id, $customer_email, $customer_
     
     return send_email($customer_email, $customer_name, $subject, $body);
 }
+
 

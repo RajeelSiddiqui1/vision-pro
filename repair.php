@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
             ";
-            send_email('info@visionprolcd.com', 'VisionPro Admin', $admin_subject, $admin_body);
+            send_email('Visionpro.lcd@gmail.com', 'VisionPro Admin', $admin_subject, $admin_body);
             
             // Clear form data
             $_POST = [];
@@ -151,7 +151,8 @@ $min_date = date('Y-m-d', strtotime('+1 day'));
         }
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -390,4 +391,5 @@ $min_date = date('Y-m-d', strtotime('+1 day'));
     </script>
 </body>
 </html>
+
 

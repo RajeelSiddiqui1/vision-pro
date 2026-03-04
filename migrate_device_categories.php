@@ -89,3 +89,4 @@ foreach ($subcategories as $sub) {
 
 echo "Migration completed successfully!\n";
 
+

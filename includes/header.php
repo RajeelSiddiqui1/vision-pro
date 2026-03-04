@@ -5,12 +5,8 @@
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->
-            <a href="index.php" class="flex items-center gap-3">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-10 w-auto">
-                <div class="hidden sm:block">
-                    <span class="text-xl font-bold text-gray-900 tracking-tight">VisionPro</span>
-                    <span class="block text-[10px] text-gray-500 uppercase tracking-widest -mt-1">LCD Refurbishing</span>
-                </div>
+            <a href="index.php" class="flex items-center gap-3 mr-12">
+                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-14 w-auto">
             </a>
 
             <!-- Desktop Nav -->
@@ -137,4 +133,5 @@
         </div>
     </div>
 </header>
+
 

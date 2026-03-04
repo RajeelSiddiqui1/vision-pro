@@ -215,3 +215,4 @@ $completed_count = count(array_filter($appointments, fn($a) => $a['status'] === 
 </body>
 </html>
 
+

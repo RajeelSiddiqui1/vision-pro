@@ -10,6 +10,8 @@ require_once 'config/db.php';
     <title>VisionPro LCD Refurbishing Inc. - Mobile Parts Wholesale</title>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Tailwind CDN Fallback -->
+    <!-- Tailwind CDN Fallback -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -262,4 +264,5 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
 

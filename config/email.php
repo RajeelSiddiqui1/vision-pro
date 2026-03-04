@@ -28,3 +28,4 @@ return [
     'debug' => (int) env('APP_DEBUG', 0) ? 2 : 0,
 ];
 
+

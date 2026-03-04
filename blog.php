@@ -19,7 +19,8 @@ $posts = $pdo->query("SELECT * FROM blog_posts WHERE status = 'published' ORDER 
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -93,4 +94,5 @@ $posts = $pdo->query("SELECT * FROM blog_posts WHERE status = 'published' ORDER 
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
 

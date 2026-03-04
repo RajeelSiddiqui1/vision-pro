@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         // Simulate sending email to Admin
-        $admin_email = "admin@visionprolcd.com";
+        $admin_email = "Visionpro.lcd@gmail.com";
         $subject = "New Newsletter Subscription";
         $message = "A new user wants to subscribe to updates: $email";
         
@@ -20,4 +20,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 header("Location: index.php");
 ?>
+
 

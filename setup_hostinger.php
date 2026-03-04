@@ -114,3 +114,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['setup_database'])) {
 </body>
 </html>
 
+

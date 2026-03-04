@@ -51,7 +51,8 @@ $products = $stmt->fetchAll();
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
@@ -119,4 +120,5 @@ $products = $stmt->fetchAll();
     </div>
 </body>
 </html>
+
 

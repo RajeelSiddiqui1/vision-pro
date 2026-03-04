@@ -42,11 +42,11 @@ require_once 'config/db.php';
             </a>
 
             <!-- Email -->
-            <a href="mailto:info@visionprolcd.com" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-orange-200 hover:-translate-y-1 transition-all">
+            <a href="mailto:Visionpro.lcd@gmail.com" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-orange-200 hover:-translate-y-1 transition-all">
                 <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">✉️</div>
                 <h3 class="font-bold text-lg mb-2">Email</h3>
                 <p class="text-gray-500 text-sm">For RMAs, invoices, and general questions.</p>
-                <div class="mt-4 font-bold text-orange-600">info@visionprolcd.com</div>
+                <div class="mt-4 font-bold text-orange-600">Visionpro.lcd@gmail.com</div>
             </a>
 
             <!-- Live Chat (Simulation) -->
@@ -73,4 +73,5 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
 

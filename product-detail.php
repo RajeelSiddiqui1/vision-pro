@@ -31,7 +31,8 @@ $related = $rel_stmt->fetchAll();
         }
     </script>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -204,4 +205,5 @@ $related = $rel_stmt->fetchAll();
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
 

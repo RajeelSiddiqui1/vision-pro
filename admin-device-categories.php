@@ -67,7 +67,8 @@ $subcategories = $pdo->query("
         }
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
@@ -180,4 +181,5 @@ $subcategories = $pdo->query("
     </div>
 </body>
 </html>
+
 
