@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->
             <a href="index.php" class="flex items-center gap-3">
-                <img src="assets/images/visionpro-logo.jpeg" alt="VisionPro" class="h-10 w-auto">
+                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-10 w-auto">
                 <div class="hidden sm:block">
                     <span class="text-xl font-bold text-gray-900 tracking-tight">VisionPro</span>
                     <span class="block text-[10px] text-gray-500 uppercase tracking-widest -mt-1">LCD Refurbishing</span>
@@ -137,3 +137,4 @@
         </div>
     </div>
 </header>
+

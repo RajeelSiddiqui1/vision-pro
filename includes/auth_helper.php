@@ -124,3 +124,4 @@ function requireAuth() {
 function optionalAuth() {
     checkRememberCookie();
 }
+

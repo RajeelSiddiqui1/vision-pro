@@ -205,3 +205,4 @@ $user = $stmt->fetch();
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

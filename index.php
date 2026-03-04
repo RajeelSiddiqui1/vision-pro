@@ -37,7 +37,9 @@ require_once 'config/db.php';
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/visionpro-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
@@ -52,7 +54,7 @@ require_once 'config/db.php';
             <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center"></div>
             <div class="container mx-auto px-4 py-24 relative z-10 flex flex-col items-center text-center">
                 <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight animate-float">VisionPro LCD Refurbishing</h1>
-                <p class="text-xl md:text-2xl mb-10 max-w-2xl text-gray-300">Your premium partner for high-quality mobile phone parts, tools, and refurbishing supplies in Brampton.</p>
+                <p class="text-xl md:text-2xl mb-10 max-w-2xl text-gray-300">Your premium partner for high-quality mobile phone parts, tools, and refurbishing supplies in Mississauga.</p>
                 <div class="flex gap-4">
                     <a href="products.php" class="btn-primary flex items-center gap-2 px-8 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/20">
                         Shop Products
@@ -214,7 +216,7 @@ require_once 'config/db.php';
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-reveal">
                     <?php 
                     $testimonials = [
-                        ['name' => 'Michael Chen', 'shop' => 'Brampton Tech Hub', 'text' => "VisionPro has been our primary supplier for 5 years. Their LCD quality is unmatched in the GTA."],
+                        ['name' => 'Michael Chen', 'shop' => 'Mississauga Tech Hub', 'text' => "VisionPro has been our primary supplier for 5 years. Their LCD quality is unmatched in the GTA."],
                         ['name' => 'Sarah Johnson', 'shop' => 'FixIt Pro', 'text' => "Fast shipping and reliable support. Their warranty process is very straightforward and fair."],
                         ['name' => 'David Miller', 'shop' => 'Elite Repair Lab', 'text' => "The best wholesale prices for premium parts."]
                     ];
@@ -260,3 +262,4 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

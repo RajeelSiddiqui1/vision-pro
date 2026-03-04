@@ -51,3 +51,4 @@ if ($stmt->rowCount() === 0) {
 
 echo "<br>Migration complete!";
 ?>
+

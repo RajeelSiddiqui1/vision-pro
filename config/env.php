@@ -44,3 +44,4 @@ function env($key, $default = null) {
     $value = $_ENV[$key] ?? $_SERVER[$key] ?? $default;
     return $value;
 }
+

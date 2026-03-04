@@ -26,7 +26,7 @@ if (!$post) {
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -86,3 +86,4 @@ if (!$post) {
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

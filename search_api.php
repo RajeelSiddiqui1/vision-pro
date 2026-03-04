@@ -26,3 +26,4 @@ try {
     echo json_encode(['error' => 'Search failed']);
 }
 ?>
+

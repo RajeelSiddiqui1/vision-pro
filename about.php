@@ -13,7 +13,7 @@
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -26,7 +26,7 @@
                     <span class="text-primary-600 font-bold uppercase tracking-widest text-sm mb-4 block">Our Story</span>
                     <h1 class="text-5xl font-bold text-gray-900 mb-8 leading-tight">Empowering Repair Professionals Since 2015</h1>
                     <p class="text-xl text-gray-600 mb-8 leading-relaxed">
-                        VisionPro LCD Refurbishing Inc. started as a small repair shop in Brampton and has grown into Ontario's leading wholesaler for premium mobile phone parts and supplies.
+                        VisionPro LCD Refurbishing Inc. started as a small repair shop in Mississauga and has grown into Ontario's leading wholesaler for premium mobile phone parts and supplies.
                     </p>
                     <div class="space-y-6">
                         <div class="flex gap-4">
@@ -44,7 +44,7 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-gray-900 text-lg">Fast Local Delivery</h3>
-                                <p class="text-gray-500">Same-day shipping for Brampton and GTA area.</p>
+                                <p class="text-gray-500">Same-day shipping for Mississauga and GTA area.</p></p>
                             </div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-3">Lightning Fast Supply</h3>
-                        <p class="text-gray-500 leading-relaxed">With our strategic Brampton location, we offer same-day dispatch and pickup options to keep your repair bench running.</p>
+                        <p class="text-gray-500 leading-relaxed">With our strategic Mississauga location, we offer same-day dispatch and pickup options to keep your repair bench running.</p>
                     </div>
 
                     <!-- Card 3 -->
@@ -197,7 +197,7 @@
                                 </span>
                             </summary>
                             <div class="text-gray-600 px-6 pb-6 leading-relaxed">
-                                Absolutely! Our Brampton hub (14 Automatic Rd.) is open for pickups. Simply select "Local Pickup" at checkout, and we'll text you when your order is ready (usually within 1 hour).
+                                Absolutely! Our Mississauga hub (7215 Goreway Dr #1c27) is open for pickups. Simply select "Local Pickup" at checkout, and we'll text you when your order is ready (usually within 1 hour).
                             </div>
                         </details>
                     </div>
@@ -229,3 +229,4 @@
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

@@ -151,7 +151,7 @@ $min_date = date('Y-m-d', strtotime('+1 day'));
         }
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -390,3 +390,4 @@ $min_date = date('Y-m-d', strtotime('+1 day'));
     </script>
 </body>
 </html>
+

@@ -12,3 +12,4 @@ if ($stmt->rowCount() === 0) {
     echo "Columns already exist.";
 }
 ?>
+

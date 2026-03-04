@@ -41,3 +41,4 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

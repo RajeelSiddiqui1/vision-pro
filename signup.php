@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </script>
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <?php include 'includes/header.php'; ?>
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-900">Create Account</h1>
-                <p class="text-gray-500 mt-2">Join Brampton's leading wholesale network</p>
+                <p class="text-gray-500 mt-2">Join Mississauga's leading wholesale network</p>
             </div>
 
             <?php if ($error): ?>
@@ -139,3 +139,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

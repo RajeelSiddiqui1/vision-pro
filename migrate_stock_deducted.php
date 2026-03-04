@@ -21,3 +21,4 @@ if ($stmt->rowCount() === 0) {
     echo "\norder_otp and otp_expiry columns already exist.";
 }
 ?>
+

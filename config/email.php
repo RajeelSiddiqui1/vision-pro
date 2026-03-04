@@ -27,3 +27,4 @@ return [
     // Debug mode (0 = off, 1 = errors only, 2 = verbose)
     'debug' => (int) env('APP_DEBUG', 0) ? 2 : 0,
 ];
+

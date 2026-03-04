@@ -34,8 +34,8 @@ require_once 'config/db.php';
                         Address
                     </h3>
                     <p class="text-gray-600">
-                        14 Automatic Rd, Unit #34<br>
-                        Brampton, Ontario, L6S 5N5<br>
+                        7215 Goreway Dr #1c27<br>
+                        Mississauga, L4T2T9<br>
                         Canada
                     </p>
                 </div>
@@ -57,7 +57,7 @@ require_once 'config/db.php';
             <div class="lg:w-2/3">
                 <div class="h-[600px] bg-gray-200 rounded-3xl overflow-hidden shadow-lg border border-gray-200 relative">
                      <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.355604169623!2d-79.6734106845012!3d43.74467067911814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3d68c9255555%3A0x6295775204481358!2s14%20Automatic%20Rd%2C%20Brampton%2C%20ON%20L6S%205N5%2C%20Canada!5e0!3m2!1sen!2sus!4v1647895234567!5m2!1sen!2sus" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2885.123456789!2d-79.65!3d43.72!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b15e4b0f3f3f3%3A0xabcdef123456!2s7215%20Goreway%20Dr%2C%20Mississauga%2C%20ON%20L4T2T9!5e0!3m2!1sen!2sus!4v1647895234567!5m2!1sen!2sus" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 
@@ -72,3 +72,4 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

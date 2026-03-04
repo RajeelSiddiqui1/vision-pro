@@ -297,3 +297,4 @@ function send_appointment_cancelled($appointment_id, $customer_email, $customer_
     
     return send_email($customer_email, $customer_name, $subject, $body);
 }
+

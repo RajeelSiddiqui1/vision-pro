@@ -56,14 +56,14 @@ $recent_orders = $recent_stmt->fetchAll();
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
         <!-- Sidebar -->
         <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
             <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.jpeg" alt="VisionPro" class="h-8 w-auto">
+                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
                 <span class="text-white">Admin</span>
             </h2>
             <nav class="space-y-4">
@@ -145,3 +145,4 @@ $recent_orders = $recent_stmt->fetchAll();
     </div>
 </body>
 </html>
+

@@ -48,7 +48,7 @@ require_once 'config/db.php';
                     <div>
                         <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
                         <h3 class="font-bold text-lg mb-2">Ship to Us</h3>
-                        <p class="text-gray-500 text-sm">Send your package to our Brampton facility. Free shipping on 50+ screens.</p>
+                        <p class="text-gray-500 text-sm">Send your package to our Mississauga facility. Free shipping on 50+ screens.</p>
                     </div>
                     <!-- Step 3 -->
                     <div>
@@ -108,3 +108,4 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

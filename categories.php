@@ -18,7 +18,7 @@ $categories = $stmt->fetchAll();
         }
     </script>
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50 group/body">
     <?php include 'includes/header.php'; ?>
@@ -49,3 +49,4 @@ $categories = $stmt->fetchAll();
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

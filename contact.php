@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50">
     <?php include 'includes/header.php'; ?>
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-400 uppercase text-xs tracking-widest mb-1">Visit Us</h4>
-                                    <p class="text-lg font-medium leading-relaxed">14 Automatic Rd., Brampton#34,<br>L6S 5N5, Ontario</p>
+                                    <p class="text-lg font-medium leading-relaxed">7215 Goreway Dr #1c27,<br>Mississauga, L4T2T9, Ontario</p>
                                 </div>
                             </div>
 
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="container mx-auto px-4">
                 <div class="bg-gray-100 rounded-[3rem] overflow-hidden h-[500px] border border-gray-200 shadow-inner relative">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.355604169623!2d-79.6734106845012!3d43.74467067911814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3d68c9255555%3A0x6295775204481358!2s14%20Automatic%20Rd%2C%20Brampton%2C%20ON%20L6S%205N5%2C%20Canada!5e0!3m2!1sen!2sus!4v1647895234567!5m2!1sen!2sus" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2885.123456789!2d-79.65!3d43.72!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b15e4b0f3f3f3%3A0xabcdef123456!2s7215%20Goreway%20Dr%2C%20Mississauga%2C%20ON%20L4T2T9!5e0!3m2!1sen!2sus!4v1647895234567!5m2!1sen!2sus" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 
@@ -195,3 +195,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+

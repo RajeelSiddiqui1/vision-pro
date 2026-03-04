@@ -63,7 +63,7 @@ if ($order_id > 0) {
     <title>Order Success - VisionPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="assets/images/visionpro-logo.jpeg">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">\n <link rel="apple-touch-icon" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <?php include 'includes/header.php'; ?>
@@ -110,3 +110,4 @@ if ($order_id > 0) {
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
