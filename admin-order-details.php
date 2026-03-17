@@ -69,16 +69,7 @@ $success = isset($_GET['success']) ? "Order updated and email notification sent!
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
-        <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
-            <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
-                <span class="text-white">Admin</span>
-            </h2>
-            <nav class="space-y-4">
-                <a href="admin.php" class="block py-2 text-gray-400 hover:text-white">Dashboard</a>
-                <a href="admin-orders.php" class="block py-2 text-primary-400 font-bold">Orders</a>
-            </nav>
-        </aside>
+        <?php include 'includes/admin_sidebar.php'; ?>
 
         <main class="flex-1 p-10">
             <header class="mb-10 flex justify-between items-center">

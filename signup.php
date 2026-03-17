@@ -1,19 +1,17 @@
 <?php
-session_start();
 require_once 'config/db.php';
+require_once 'includes/security.php';
 require_once 'includes/email_helper.php';
 
-$error = '';
-$success = '';
-$email = '';
+// Prevent caching and redirect if already authenticated
+no_cache_headers();
+redirect_if_logged_in();
 
-// Redirect if already logged in
-if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
-    exit;
-}
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF Check
+    csrf_verify();
     $full_name = htmlspecialchars($_POST['full_name']);
     $email = htmlspecialchars($_POST['email']);
     $password = $_POST['password'];
@@ -104,6 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <form action="signup.php" method="POST" class="space-y-5">
+                <!-- CSRF Protection -->
+                <?= csrf_field() ?>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                     <input type="text" name="full_name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all">

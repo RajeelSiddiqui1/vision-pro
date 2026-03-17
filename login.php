@@ -1,37 +1,28 @@
 <?php
-session_start();
 require_once 'config/db.php';
+require_once 'includes/security.php';
 require_once 'includes/auth_helper.php';
 
-// Redirect if already logged in (check session first, then remember cookie)
-checkRememberCookie();
-if (isset($_SESSION['user_id'])) {
-    $dashboard = ($_SESSION['user_role'] === 'admin') ? 'admin.php' : 'dashboard.php';
-    header("Location: $dashboard");
-    exit;
-}
+// Prevent caching and redirect if already authenticated
+no_cache_headers();
+redirect_if_logged_in();
 
 $error = '';
 $success = $_SESSION['signup_success'] ?? '';
 unset($_SESSION['signup_success']);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['bypass'])) {
-    if (isset($_GET['bypass']) && $_GET['bypass'] === 'admin_debug') {
-        // Find ANY admin user if the specific one doesn't exist
-        $stmt = $pdo->query("SELECT * FROM users WHERE role = 'admin' LIMIT 1");
-        $user = $stmt->fetch();
-        $bypass = true;
-    } else {
-        $email = strtolower(trim($_POST['email']));
-        $password = $_POST['password']; 
-        $bypass = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF Check
+    csrf_verify();
 
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
-    }
+    $email = strtolower(trim($_POST['email']));
+    $password = $_POST['password']; 
 
-    if ($user && ($bypass || password_verify($password, $user['password']))) {
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['full_name'];
         $_SESSION['user_role'] = $user['role'];
@@ -88,6 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['bypass'])) {
             <?php endif; ?>
 
             <form action="login.php" method="POST" class="space-y-6">
+                <!-- CSRF Protection -->
+                <?= csrf_field() ?>
+                
                 <!-- Preserve redirect URL if present -->
                 <input type="hidden" name="redirect" value="<?= htmlspecialchars($_GET['redirect'] ?? '') ?>">
                 <div>

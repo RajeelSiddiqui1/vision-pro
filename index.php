@@ -67,47 +67,78 @@ require_once 'config/db.php';
             </div>
         </section>
 
-        <!-- Categories Section -->
-        <section class="py-24 bg-white overflow-hidden">
+        <!-- Brands Section -->
+        <section class="py-24 bg-theme overflow-hidden relative border-b border-gray-100">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div>
-                        <span class="text-primary-600 font-bold tracking-widest uppercase text-xs">Premium Collection</span>
-                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">Explore Categories</h2>
+                        <span class="text-primary-600 font-bold tracking-widest uppercase text-xs">Premium Partners</span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">Shop by Brand</h2>
+                    </div>
+                    <a href="brands.php" class="group flex items-center gap-2 text-gray-900 font-bold hover:text-primary-600 transition-all uppercase tracking-widest text-sm">
+                        View All Brands
+                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                    <?php 
+                    $brands = $pdo->query("SELECT * FROM brands WHERE is_active = 1 LIMIT 6")->fetchAll();
+                    foreach($brands as $b): 
+                    ?>
+                    <a href="categories.php?brand_id=<?= $b['id'] ?>" class="theme-card p-8 flex flex-col items-center group">
+                        <div class="w-20 h-20 theme-inset rounded-full flex items-center justify-center mb-6 overflow-hidden bg-white p-2">
+                            <?php if(!empty($b['logo'])): ?>
+                                <img src="<?= $b['logo'] ?>" class="w-12 h-12 object-contain filter grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" alt="<?= $b['name'] ?>">
+                            <?php else: ?>
+                                <span class="text-2xl font-black text-gray-400 group-hover:text-primary-600 transition-colors"><?= substr($b['name'], 0, 1) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <span class="text-xs font-bold text-gray-600 group-hover:text-primary-600 uppercase tracking-widest transition-colors"><?= $b['name'] ?></span>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="py-24 bg-white overflow-hidden border-b border-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div>
+                        <span class="text-primary-600 font-bold tracking-widest uppercase text-xs">Device Models</span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">Explore Series</h2>
                     </div>
                     <a href="categories.php" class="group flex items-center gap-2 text-gray-900 font-bold hover:text-primary-600 transition-all uppercase tracking-widest text-sm">
-                        View All Categories
+                        View All Series
                         <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <?php 
-                    $stmt = $pdo->query("SELECT * FROM categories LIMIT 6");
+                    $stmt = $pdo->query("SELECT * FROM categories WHERE parent_id IS NULL LIMIT 6");
                     $categories = $stmt->fetchAll();
-                    $colors = ['bg-blue-600', 'bg-emerald-600', 'bg-purple-600', 'bg-amber-600', 'bg-rose-600', 'bg-indigo-600'];
+                    $colors = ['bg-blue-100', 'bg-emerald-100', 'bg-purple-100', 'bg-amber-100', 'bg-rose-100', 'bg-indigo-100'];
                     foreach($categories as $index => $cat): 
                         $color = $colors[$index % count($colors)];
                     ?>
-                    <a href="products.php?category=<?= $cat['id'] ?>" 
-                       class="group relative h-80 rounded-3xl overflow-hidden shadow-lg shadow-gray-200 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-                        <!-- Image Background -->
-                        <div class="absolute inset-0 z-0">
+                    <a href="parts.php?category_id=<?= $cat['id'] ?>" 
+                       class="group theme-card flex flex-col relative overflow-hidden transition-all duration-700">
+                        <!-- Image Container -->
+                        <div class="relative h-60 theme-inset overflow-hidden m-4 flex items-center justify-center bg-white p-4">
                             <?php if($cat['image_url']): ?>
-                                <img src="<?= $cat['image_url'] ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="<?= $cat['name'] ?>">
+                                <img src="<?= $cat['image_url'] ?>" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-1000" alt="<?= $cat['name'] ?>">
                             <?php else: ?>
-                                <div class="w-full h-full <?= $color ?> opacity-80 flex items-center justify-center text-8xl">📦</div>
+                                <div class="w-full h-full text-gray-300 opacity-60 flex items-center justify-center text-8xl">📦</div>
                             <?php endif; ?>
-                            <!-- Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                         </div>
                         
                         <!-- Content -->
-                        <div class="absolute inset-0 z-10 p-8 flex flex-col justify-end">
-                            <h3 class="text-2xl font-bold text-white mb-2 transform group-hover:-translate-y-2 transition-transform duration-500"><?= $cat['name'] ?></h3>
-                            <div class="flex items-center gap-2 text-primary-400 font-bold text-sm opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                                <span>Shop Now</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <div class="px-8 pb-8 pt-4 flex flex-col text-center">
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors duration-500 mb-3 tracking-tight"><?= $cat['name'] ?></h3>
+                            <div class="flex items-center justify-center gap-2 text-primary-500 font-bold text-[10px] uppercase tracking-widest">
+                                <span>Browse Parts</span>
                             </div>
                         </div>
                     </a>
@@ -117,7 +148,7 @@ require_once 'config/db.php';
         </section>
 
         <!-- Hot Selling Products -->
-        <section class="py-20 bg-gray-50 reveal">
+        <section class="py-20 bg-theme reveal">
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-end mb-12">
                     <div>
@@ -131,15 +162,22 @@ require_once 'config/db.php';
                     $featured = $stmt->fetchAll();
                     foreach($featured as $p): ?>
                     <!-- Reuse product card logic from products.php -->
-                    <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all hover:shadow-2xl hover:-translate-y-1 relative">
+                    <div class="group theme-card flex flex-col relative overflow-hidden transition-all duration-300 transform hover:-translate-y-2">
                         <a href="product-detail.php?id=<?= $p['id'] ?>" class="absolute inset-0 z-10"><span class="sr-only">View Product</span></a>
-                        <div class="relative h-64 bg-gray-100 overflow-hidden">
-                            <img src="<?= $p['main_image'] ?: 'https://via.placeholder.com/400x400?text=No+Image' ?>" class="w-full h-full object-cover transition-transform group-hover:scale-110">
-                            <span class="absolute top-4 left-4 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">Hot</span>
+                        <div class="relative h-60 theme-inset overflow-hidden m-4 flex items-center justify-center bg-white p-6">
+                            <img src="<?= $p['main_image'] ?: 'https://via.placeholder.com/400x400?text=No+Image' ?>" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110">
+                            <span class="absolute top-4 left-4 bg-orange-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-orange-200">Hot</span>
                         </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-gray-900 mb-2 truncate"><?= $p['name'] ?></h3>
-                            <p class="text-primary-600 font-bold text-xl">$<?= number_format($p['price'], 2) ?></p>
+                        <div class="px-8 pb-8 pt-2 text-center flex-1 flex flex-col">
+                            <h3 class="font-bold text-gray-900 mb-3 transition-colors leading-tight line-clamp-2"><?= $p['name'] ?></h3>
+                            <div class="flex items-center justify-center gap-3">
+                                <?php if($p['discount_price']): ?>
+                                <span class="text-2xl font-black text-gray-900">$<?= number_format($p['discount_price'], 2) ?></span>
+                                <span class="text-sm text-gray-400 line-through font-bold">$<?= number_format($p['price'], 2) ?></span>
+                                <?php else: ?>
+                                <span class="text-2xl font-black text-gray-900">$<?= number_format($p['price'], 2) ?></span>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -162,16 +200,20 @@ require_once 'config/db.php';
                     $stmt = $pdo->query("SELECT p.*, c.name as category_name FROM products p JOIN categories c ON p.category_id = c.id ORDER BY p.created_at DESC LIMIT 8");
                     $latest = $stmt->fetchAll();
                     foreach($latest as $p): ?>
-                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all relative">
+                    <div class="group theme-card flex flex-col relative overflow-hidden transition-all duration-300 transform hover:-translate-y-2">
                         <a href="product-detail.php?id=<?= $p['id'] ?>" class="absolute inset-0 z-10"><span class="sr-only">View Product</span></a>
-                        <div class="h-48 bg-gray-100">
-                             <img src="<?= $p['main_image'] ?: 'https://via.placeholder.com/400x400?text=No+Image' ?>" class="w-full h-full object-cover">
+                        <div class="relative h-48 theme-inset overflow-hidden m-4 flex items-center justify-center bg-white p-4">
+                             <img src="<?= $p['main_image'] ?: 'https://via.placeholder.com/400x400?text=No+Image' ?>" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
                         </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-gray-800 text-sm truncate"><?= $p['name'] ?></h3>
-                            <div class="flex justify-between items-center mt-4">
-                                <span class="text-primary-600 font-bold">$<?= number_format($p['price'], 2) ?></span>
-                                <span class="text-xs bg-gray-100 px-3 py-1 rounded-lg hover:bg-primary-600 hover:text-white transition-all z-20 relative">Details</span>
+                        <div class="px-6 pb-6 pt-2 text-center flex-1 flex flex-col">
+                            <h3 class="font-bold text-gray-900 text-sm line-clamp-2 mb-4"><?= $p['name'] ?></h3>
+                            <div class="flex justify-between items-center mt-auto">
+                                <?php if($p['discount_price']): ?>
+                                <span class="text-primary-600 font-black text-lg">$<?= number_format($p['discount_price'], 2) ?></span>
+                                <?php else: ?>
+                                <span class="text-primary-600 font-black text-lg">$<?= number_format($p['price'], 2) ?></span>
+                                <?php endif; ?>
+                                <span class="text-xs px-4 py-2 theme-button font-bold rounded-lg transition-all z-20 relative pointer-events-auto">Details</span>
                             </div>
                         </div>
                     </div>
@@ -264,5 +306,7 @@ require_once 'config/db.php';
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>
+
+
 
 

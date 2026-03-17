@@ -35,7 +35,7 @@ if ($order_id > 0) {
 // Get order items for display
 $items_html = '';
 if ($order_id > 0) {
-    $items_stmt = $pdo->prepare("SELECT oi.*, p.name as product_name, p.image FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?");
+    $items_stmt = $pdo->prepare("SELECT oi.*, p.name as product_name, p.main_image as image FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?");
     $items_stmt->execute([$order_id]);
     $order_items = $items_stmt->fetchAll();
     

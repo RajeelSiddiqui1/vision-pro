@@ -3,55 +3,29 @@ session_start();
 require_once 'config/db.php';
 require_once 'includes/email_helper.php';
 
-// Prevent caching
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+require_once 'includes/security.php';
 
 // Admin Check
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    die("Access Denied. Admins Only.");
-}
+require_admin();
 
-// Handle status update
-if (isset($_POST['update_status']) && isset($_POST['appointment_id']) && isset($_POST['status'])) {
-    $appointment_id = $_POST['appointment_id'];
-    $new_status = $_POST['status'];
-    
-    // Get current appointment details before update
-    $stmt = $pdo->prepare("SELECT a.*, rs.name as service_name, rs.price as service_price FROM appointments a LEFT JOIN repair_services rs ON a.service_id = rs.id WHERE a.id = ?");
-    $stmt->execute([$appointment_id]);
-    $appointment = $stmt->fetch();
-    
-    // Update status
-    $stmt = $pdo->prepare("UPDATE appointments SET status = ? WHERE id = ?");
-    $stmt->execute([$new_status, $appointment_id]);
-    
-    // Send email notification to customer based on status
-    if ($new_status === 'confirmed') {
-        $appointment_details = [
-            'service_name' => $appointment['service_name'],
-            'service_price' => $appointment['service_price'],
-            'appointment_date' => $appointment['appointment_date'],
-            'appointment_time' => $appointment['appointment_time'],
-            'device_model' => $appointment['device_model']
-        ];
-        send_appointment_confirmation($appointment_id, $appointment['customer_email'], $appointment['customer_name'], $appointment_details);
-    } elseif ($new_status === 'cancelled') {
-        send_appointment_cancelled($appointment_id, $appointment['customer_email'], $appointment['customer_name']);
-    }
-    
-    header("Location: admin-appointments.php?updated=1");
-    exit;
-}
+// Prevent caching
+no_cache_headers();
+
+// Debug - check if session is working
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Note: Status updates are now handled via AJAX in admin_api.php
+// But we keep this logic if there's a fallback needed, or just remove it.
+// I'll remove it for performance as requested.
 
 // Get all appointments with service info
 $appointments = $pdo->query("
     SELECT a.*, rs.name as service_name, rs.price as service_price, u.full_name as user_name, u.email as user_email
     FROM appointments a
-    LEFT JOIN repair_services rs ON a.service_id = rs.id
+    LEFT JOIN repair_services rs ON a.service_type = rs.name
     LEFT JOIN users u ON a.user_id = u.id
-    ORDER BY a.appointment_date DESC, a.appointment_time DESC
+    ORDER BY a.created_at DESC
 ")->fetchAll();
 
 // Get stats
@@ -94,24 +68,7 @@ $completed_count = count(array_filter($appointments, fn($a) => $a['status'] === 
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
-            <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
-                <span class="text-white">Admin</span>
-            </h2>
-            <nav class="space-y-4">
-                <a href="admin.php" class="block py-2 text-gray-400 hover:text-white">Dashboard</a>
-                <a href="admin-products.php" class="block py-2 text-gray-400 hover:text-white">Products</a>
-                <a href="admin-categories.php" class="block py-2 text-gray-400 hover:text-white">Categories</a>
-                <a href="admin-orders.php" class="block py-2 text-gray-400 hover:text-white">Orders</a>
-                <a href="admin-users.php" class="block py-2 text-gray-400 hover:text-white">Customers</a>
-                <a href="admin-blogs.php" class="block py-2 text-gray-400 hover:text-white">Blogs</a>
-                <a href="admin-repair-services.php" class="block py-2 text-gray-400 hover:text-white">Repair Services</a>
-                <a href="admin-appointments.php" class="block py-2 text-primary-400 font-bold">Appointments</a>
-                <a href="index.php" class="block py-2 text-gray-400 hover:text-white border-t border-gray-800 pt-4">View Site</a>
-            </nav>
-        </aside>
+        <?php include 'includes/admin_sidebar.php'; ?>
 
         <!-- Content -->
         <main class="flex-1 p-10">
@@ -193,16 +150,16 @@ $completed_count = count(array_filter($appointments, fn($a) => $a['status'] === 
                                 </span>
                             </td>
                             <td class="p-6">
-                                <form method="POST" class="inline">
-                                    <input type="hidden" name="appointment_id" value="<?= $apt['id'] ?>">
-                                    <select name="status" onchange="this.form.submit()" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                    <select 
+                                        class="ajax-status-select text-sm border border-gray-300 rounded px-2 py-1 outline-none focus:ring-2 focus:ring-primary-500"
+                                        data-id="<?= $apt['id'] ?>"
+                                        data-endpoint="admin_api.php?type=appointment_status"
+                                    >
                                         <option value="pending" <?= $apt['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
                                         <option value="confirmed" <?= $apt['status'] === 'confirmed' ? 'selected' : '' ?>>Confirmed</option>
                                         <option value="completed" <?= $apt['status'] === 'completed' ? 'selected' : '' ?>>Completed</option>
                                         <option value="cancelled" <?= $apt['status'] === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
                                     </select>
-                                    <input type="hidden" name="update_status" value="1">
-                                </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -212,6 +169,7 @@ $completed_count = count(array_filter($appointments, fn($a) => $a['status'] === 
             </div>
         </main>
     </div>
+    <script src="assets/js/admin.js"></script>
 </body>
 </html>
 

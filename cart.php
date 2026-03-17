@@ -63,24 +63,23 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             <!-- Items List -->
             <div class="flex-1 space-y-6">
                 <?php foreach ($cart_items as $item): ?>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6">
+                <div class="cart-item bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6" data-product-id="<?= $item['product']['id'] ?>">
                     <img src="<?= $item['product']['main_image'] ?: 'https://via.placeholder.com/100' ?>" class="w-24 h-24 object-cover rounded-xl bg-gray-50">
                     <div class="flex-1">
                         <h3 class="font-bold text-lg text-gray-900"><?= $item['product']['name'] ?></h3>
                         <p class="text-sm text-gray-500">Unit Price: $<?= number_format($item['product']['price'], 2) ?></p>
                         <form action="cart_action.php" method="POST" class="mt-4 flex items-center gap-4">
                             <input type="hidden" name="product_id" value="<?= $item['product']['id'] ?>">
-                            <input type="hidden" name="action" value="update">
                             <div class="flex items-center border rounded-lg overflow-hidden h-10">
                                 <input type="number" name="quantity" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['product']['stock_quantity'] ?>" class="w-16 text-center focus:ring-primary-500 outline-none font-bold">
                             </div>
                             <span class="text-xs text-gray-500"><?= $item['product']['stock_quantity'] ?> in stock</span>
-                            <button type="submit" class="text-xs font-bold text-primary-600 uppercase tracking-widest hover:underline">Update</button>
+                            <button type="submit" name="action" value="update" class="text-xs font-bold text-primary-600 uppercase tracking-widest hover:underline">Update</button>
                             <button type="submit" name="action" value="remove" class="text-xs font-bold text-red-500 uppercase tracking-widest hover:underline ml-auto">Remove</button>
                         </form>
                     </div>
                     <div class="text-right">
-                        <span class="text-xl font-bold text-gray-900">$<?= number_format($item['subtotal'], 2) ?></span>
+                        <span class="item-subtotal text-xl font-bold text-gray-900" data-item-subtotal>$<?= number_format($item['subtotal'], 2) ?></span>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -93,7 +92,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                     <div class="space-y-4 mb-8">
                         <div class="flex justify-between text-gray-600">
                             <span>Subtotal</span>
-                            <span>$<?= number_format($total, 2) ?></span>
+                            <span id="cart-subtotal">$<?= number_format($total, 2) ?></span>
                         </div>
                         <div class="flex justify-between text-gray-600">
                             <span>Shipping</span>
@@ -101,11 +100,11 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                         </div>
                         <div class="flex justify-between text-gray-600">
                             <span>Tax (Ontario 13% HST)</span>
-                            <span>$<?= number_format($total * 0.13, 2) ?></span>
+                            <span id="cart-tax">$<?= number_format($total * 0.13, 2) ?></span>
                         </div>
                         <div class="pt-6 border-t border-gray-100 flex justify-between">
                             <span class="font-bold text-gray-900">Total</span>
-                            <span class="text-2xl font-bold text-primary-600">$<?= number_format($total * 1.13, 2) ?></span>
+                            <span id="cart-total" class="text-2xl font-bold text-primary-600">$<?= number_format($total * 1.13, 2) ?></span>
                         </div>
                     </div>
                     <a href="checkout.php" class="w-full btn-primary block text-center py-4">Proceed to Checkout</a>

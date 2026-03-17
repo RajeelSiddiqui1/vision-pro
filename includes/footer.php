@@ -153,7 +153,7 @@
         <svg class="w-7 h-7 hidden group-hover:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
 
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/chat.js"></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/chat.js" defer></script>
 
 

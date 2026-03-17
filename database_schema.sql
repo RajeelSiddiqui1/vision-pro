@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS users (
     business_name VARCHAR(255),
     is_verified BOOLEAN DEFAULT FALSE,
     remember_token VARCHAR(255),
-    otp_code VARCHAR(10),
-    otp_expires_at DATETIME,
+    order_otp VARCHAR(10),
+    otp_expiry DATETIME,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_email (email),
@@ -61,6 +61,10 @@ CREATE TABLE IF NOT EXISTS products (
     main_image VARCHAR(255),
     is_featured BOOLEAN DEFAULT FALSE,
     is_active BOOLEAN DEFAULT TRUE,
+    quality_tier VARCHAR(50),
+    warranty VARCHAR(100),
+    compatibility VARCHAR(255),
+    bulk_pricing JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
@@ -181,6 +185,22 @@ CREATE TABLE IF NOT EXISTS device_categories (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
+-- DEVICE SUBCATEGORIES TABLE
+-- =====================================================
+CREATE TABLE IF NOT EXISTS device_subcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES device_categories(id) ON DELETE CASCADE,
+    INDEX idx_slug (slug),
+    INDEX idx_category (category_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
 -- REPAIR SERVICES TABLE
 -- =====================================================
 CREATE TABLE IF NOT EXISTS repair_services (
@@ -191,6 +211,8 @@ CREATE TABLE IF NOT EXISTS repair_services (
     description TEXT,
     price DECIMAL(10, 2),
     category VARCHAR(100),
+    icon VARCHAR(50),
+    duration_minutes INT DEFAULT 60,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (device_category_id) REFERENCES device_categories(id) ON DELETE SET NULL,
@@ -199,9 +221,9 @@ CREATE TABLE IF NOT EXISTS repair_services (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
--- BLOGS TABLE
+-- BLOG POSTS TABLE
 -- =====================================================
-CREATE TABLE IF NOT EXISTS blogs (
+CREATE TABLE IF NOT EXISTS blog_posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
@@ -279,7 +301,7 @@ ON DUPLICATE KEY UPDATE name = name;
 -- =====================================================
 -- SAMPLE BLOG POSTS
 -- =====================================================
-INSERT INTO blogs (title, slug, content, excerpt, author, status) VALUES
+INSERT INTO blog_posts (title, slug, content, excerpt, author, status) VALUES
 ('Welcome to VisionPro Refurbishing', 'welcome-to-visionpro', 'Welcome to VisionPro - your trusted source for quality phone parts and refurbishing services.', 'Welcome to VisionPro Refurbishing', 'Admin', 'published'),
 ('How to Choose the Right Phone Screen', 'choose-right-phone-screen', 'Learn how to select the perfect replacement screen for your phone.', 'Guide to choosing phone screens', 'Admin', 'published')
 ON DUPLICATE KEY UPDATE title = title;

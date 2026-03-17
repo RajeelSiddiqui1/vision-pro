@@ -12,6 +12,39 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     die("Access Denied. Admins Only.");
 }
 
+// Check if device_categories table exists and create if not
+$table_exists = $pdo->query("SHOW TABLES LIKE 'device_categories'")->rowCount() > 0;
+
+if (!$table_exists) {
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS device_categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
+            description TEXT,
+            icon VARCHAR(100),
+            is_active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_slug (slug)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ");
+    
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS device_subcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_id INT NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
+            description TEXT,
+            is_active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (category_id) REFERENCES device_categories(id) ON DELETE CASCADE,
+            INDEX idx_slug (slug),
+            INDEX idx_category (category_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ");
+}
+
 $error = '';
 $success = '';
 
@@ -97,25 +130,7 @@ if (isset($_POST['save_subcategory'])) {
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
-            <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
-                <span class="text-white">Admin</span>
-            </h2>
-            <nav class="space-y-4">
-                <a href="admin.php" class="block py-2 text-gray-400 hover:text-white">Dashboard</a>
-                <a href="admin-products.php" class="block py-2 text-gray-400 hover:text-white">Products</a>
-                <a href="admin-categories.php" class="block py-2 text-gray-400 hover:text-white">Categories</a>
-                <a href="admin-orders.php" class="block py-2 text-gray-400 hover:text-white">Orders</a>
-                <a href="admin-users.php" class="block py-2 text-gray-400 hover:text-white">Customers</a>
-                <a href="admin-blogs.php" class="block py-2 text-gray-400 hover:text-white">Blogs</a>
-                <a href="admin-repair-services.php" class="block py-2 text-gray-400 hover:text-white">Repair Services</a>
-                <a href="admin-device-categories.php" class="block py-2 text-primary-400 font-bold">Device Categories</a>
-                <a href="admin-appointments.php" class="block py-2 text-gray-400 hover:text-white">Appointments</a>
-                <a href="index.php" class="block py-2 text-gray-400 hover:text-white border-t border-gray-800 pt-4">View Site</a>
-            </nav>
-        </aside>
+        <?php include 'includes/admin_sidebar.php'; ?>
 
         <!-- Content -->
         <main class="flex-1 p-10">

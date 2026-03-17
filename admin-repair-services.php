@@ -1,16 +1,12 @@
 <?php
-session_start();
 require_once 'config/db.php';
-
-// Prevent caching
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+require_once 'includes/security.php';
 
 // Admin Check
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    die("Access Denied. Admins Only.");
-}
+require_admin();
+
+// Prevent caching
+no_cache_headers();
 
 // Handle delete action
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
@@ -28,11 +24,11 @@ $selected_category = $_GET['category'] ?? '';
 
 // Get services with category filter
 if ($selected_category) {
-    $stmt = $pdo->prepare("SELECT rs.*, c.name as category_name FROM repair_services rs LEFT JOIN categories c ON rs.category_id = c.id WHERE rs.category_id = ? ORDER BY rs.id ASC");
+    $stmt = $pdo->prepare("SELECT rs.*, dc.name as category_name FROM repair_services rs LEFT JOIN device_categories dc ON rs.device_category_id = dc.id WHERE rs.device_category_id = ? ORDER BY rs.id ASC");
     $stmt->execute([$selected_category]);
     $services = $stmt->fetchAll();
 } else {
-    $services = $pdo->query("SELECT rs.*, c.name as category_name FROM repair_services rs LEFT JOIN categories c ON rs.category_id = c.id ORDER BY rs.id ASC")->fetchAll();
+    $services = $pdo->query("SELECT rs.*, dc.name as category_name FROM repair_services rs LEFT JOIN device_categories dc ON rs.device_category_id = dc.id ORDER BY rs.id ASC")->fetchAll();
 }
 ?>
 <!DOCTYPE html>
@@ -71,24 +67,7 @@ if ($selected_category) {
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
-            <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
-                <span class="text-white">Admin</span>
-            </h2>
-            <nav class="space-y-4">
-                <a href="admin.php" class="block py-2 text-gray-400 hover:text-white">Dashboard</a>
-                <a href="admin-products.php" class="block py-2 text-gray-400 hover:text-white">Products</a>
-                <a href="admin-categories.php" class="block py-2 text-gray-400 hover:text-white">Categories</a>
-                <a href="admin-orders.php" class="block py-2 text-gray-400 hover:text-white">Orders</a>
-                <a href="admin-users.php" class="block py-2 text-gray-400 hover:text-white">Customers</a>
-                <a href="admin-blogs.php" class="block py-2 text-gray-400 hover:text-white">Blogs</a>
-                <a href="admin-repair-services.php" class="block py-2 text-primary-400 font-bold">Repair Services</a>
-                <a href="admin-appointments.php" class="block py-2 text-gray-400 hover:text-white">Appointments</a>
-                <a href="index.php" class="block py-2 text-gray-400 hover:text-white border-t border-gray-800 pt-4">View Site</a>
-            </nav>
-        </aside>
+        <?php include 'includes/admin_sidebar.php'; ?>
 
         <!-- Content -->
         <main class="flex-1 p-10">
@@ -155,7 +134,7 @@ if ($selected_category) {
                             </td>
                             <td class="p-6">
                                 <a href="admin-repair-service-edit.php?id=<?= $service['id'] ?>" class="text-primary-600 font-bold hover:underline mr-4">Edit</a>
-                                <a href="admin-repair-services.php?delete=<?= $service['id'] ?>" class="text-red-600 font-bold hover:underline" onclick="return confirm('Are you sure you want to delete this service?')">Delete</a>
+                                <a href="admin-repair-services.php?delete=<?= $service['id'] ?>" class="text-red-600 font-bold hover:underline" onclick="smartDelete(this, 'Decommission Service', 'Are you sure you want to permanently remove this repair service? This record will be purged from the registry.')">Delete</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

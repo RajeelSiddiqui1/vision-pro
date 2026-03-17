@@ -7,6 +7,13 @@ if (!isset($_SESSION['otp_verified']) || !isset($_SESSION['reset_email'])) {
     exit;
 }
 
+// Check if reset_otp column exists, if not add it
+try {
+    $pdo->query("SELECT reset_otp FROM users LIMIT 1");
+} catch (Exception $e) {
+    $pdo->exec("ALTER TABLE users ADD COLUMN reset_otp VARCHAR(10) AFTER order_otp");
+}
+
 $error = '';
 $success = '';
 
@@ -39,7 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Reset Password - VisionPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { primary: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e', 950: '#082f49' } } } }
+        }
+    </script>
     <link href="assets/css/style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/images/visionpro-logo.png">
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
     <div class="max-w-md w-full p-8 bg-white rounded-3xl shadow-2xl border border-gray-100">
@@ -67,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" name="confirm_password" required placeholder="••••••••" 
                        class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-primary-500">
             </div>
-            <button type="submit" class="w-full bg-primary-600 text-white font-bold py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg shadow-primary-100">
+            <button type="submit" class="w-full text-white font-bold py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg" style="background-color: #0284c7;">
                 Update Password
             </button>
         </form>

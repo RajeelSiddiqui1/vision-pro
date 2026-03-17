@@ -1,15 +1,66 @@
 <?php
-session_start();
 require_once 'config/db.php';
-
-// Prevent caching
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+require_once 'includes/security.php';
 
 // Admin Check
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    die("Access Denied. Admins Only.");
+require_admin();
+
+// Prevent caching
+no_cache_headers();
+
+// Check if device_categories table exists
+$categories_table_exists = $pdo->query("SHOW TABLES LIKE 'device_categories'")->rowCount() > 0;
+
+if (!$categories_table_exists) {
+    // Create tables if they don't exist
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS device_categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
+            description TEXT,
+            icon VARCHAR(100),
+            is_active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_slug (slug)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ");
+    
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS device_subcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_id INT NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
+            description TEXT,
+            is_active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (category_id) REFERENCES device_categories(id) ON DELETE CASCADE,
+            INDEX idx_slug (slug),
+            INDEX idx_category (category_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ");
+} else {
+    // Check if device_subcategories table exists separately
+    $subcategories_table_exists = $pdo->query("SHOW TABLES LIKE 'device_subcategories'")->rowCount() > 0;
+    
+    if (!$subcategories_table_exists) {
+        // Create device_subcategories table if it doesn't exist
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS device_subcategories (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                category_id INT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                slug VARCHAR(255) NOT NULL UNIQUE,
+                description TEXT,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (category_id) REFERENCES device_categories(id) ON DELETE CASCADE,
+                INDEX idx_slug (slug),
+                INDEX idx_category (category_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    }
 }
 
 // Handle delete action
@@ -72,25 +123,7 @@ $subcategories = $pdo->query("
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
-            <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
-                <span class="text-white">Admin</span>
-            </h2>
-            <nav class="space-y-4">
-                <a href="admin.php" class="block py-2 text-gray-400 hover:text-white">Dashboard</a>
-                <a href="admin-products.php" class="block py-2 text-gray-400 hover:text-white">Products</a>
-                <a href="admin-categories.php" class="block py-2 text-gray-400 hover:text-white">Categories</a>
-                <a href="admin-orders.php" class="block py-2 text-gray-400 hover:text-white">Orders</a>
-                <a href="admin-users.php" class="block py-2 text-gray-400 hover:text-white">Customers</a>
-                <a href="admin-blogs.php" class="block py-2 text-gray-400 hover:text-white">Blogs</a>
-                <a href="admin-repair-services.php" class="block py-2 text-gray-400 hover:text-white">Repair Services</a>
-                <a href="admin-device-categories.php" class="block py-2 text-primary-400 font-bold">Device Categories</a>
-                <a href="admin-appointments.php" class="block py-2 text-gray-400 hover:text-white">Appointments</a>
-                <a href="index.php" class="block py-2 text-gray-400 hover:text-white border-t border-gray-800 pt-4">View Site</a>
-            </nav>
-        </aside>
+        <?php include 'includes/admin_sidebar.php'; ?>
 
         <!-- Content -->
         <main class="flex-1 p-10">
@@ -135,7 +168,7 @@ $subcategories = $pdo->query("
                             </td>
                             <td class="p-6">
                                 <a href="admin-device-category-edit.php?id=<?= $cat['id'] ?>" class="text-primary-600 font-bold hover:underline mr-4">Edit</a>
-                                <a href="admin-device-categories.php?delete=<?= $cat['id'] ?>" class="text-red-600 font-bold hover:underline" onclick="return confirm('Are you sure? This will also delete all subcategories.')">Delete</a>
+                                <a href="admin-device-categories.php?delete=<?= $cat['id'] ?>" class="text-red-600 font-bold hover:underline" onclick="smartDelete(this, 'Purge Brand Category', 'Are you sure? This will permanently remove the brand and all associated subcategories/device types.')">Delete</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

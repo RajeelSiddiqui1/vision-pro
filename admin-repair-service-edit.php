@@ -33,6 +33,9 @@ if (!$service) {
     die("Service not found");
 }
 
+// Get all device categories for dropdown
+$device_categories = $pdo->query("SELECT * FROM device_categories WHERE is_active = 1 ORDER BY name ASC")->fetchAll();
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -42,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $duration_minutes = intval($_POST['duration_minutes'] ?? 60);
     $icon = trim($_POST['icon'] ?? '🔧');
     $is_active = isset($_POST['is_active']) ? 1 : 0;
-    $category_id = !empty($_POST['category_id']) ? intval($_POST['category_id']) : null;
+    $device_category_id = !empty($_POST['device_category_id']) ? intval($_POST['device_category_id']) : null;
 
     if (empty($name) || empty($slug) || $price <= 0) {
         $error = 'Please fill in all required fields.';
@@ -53,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->fetch()) {
             $error = 'This slug already exists. Please use a different one.';
         } else {
-            $stmt = $pdo->prepare("UPDATE repair_services SET name = ?, slug = ?, description = ?, price = ?, duration_minutes = ?, icon = ?, is_active = ?, category_id = ? WHERE id = ?");
-            $stmt->execute([$name, $slug, $description, $price, $duration_minutes, $icon, $is_active, $category_id, $service_id]);
+            $stmt = $pdo->prepare("UPDATE repair_services SET name = ?, slug = ?, description = ?, price = ?, duration_minutes = ?, icon = ?, is_active = ?, device_category_id = ? WHERE id = ?");
+            $stmt->execute([$name, $slug, $description, $price, $duration_minutes, $icon, $is_active, $device_category_id, $service_id]);
             $success = 'Service updated successfully!';
             
             // Refresh service data
@@ -101,24 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 sticky top-0">
-            <h2 class="text-2xl font-bold mb-10 text-primary-400">
-                <img src="assets/images/visionpro-logo.png" alt="VisionPro" class="h-8 w-auto">
-                <span class="text-white">Admin</span>
-            </h2>
-            <nav class="space-y-4">
-                <a href="admin.php" class="block py-2 text-gray-400 hover:text-white">Dashboard</a>
-                <a href="admin-products.php" class="block py-2 text-gray-400 hover:text-white">Products</a>
-                <a href="admin-categories.php" class="block py-2 text-gray-400 hover:text-white">Categories</a>
-                <a href="admin-orders.php" class="block py-2 text-gray-400 hover:text-white">Orders</a>
-                <a href="admin-users.php" class="block py-2 text-gray-400 hover:text-white">Customers</a>
-                <a href="admin-blogs.php" class="block py-2 text-gray-400 hover:text-white">Blogs</a>
-                <a href="admin-repair-services.php" class="block py-2 text-primary-400 font-bold">Repair Services</a>
-                <a href="admin-appointments.php" class="block py-2 text-gray-400 hover:text-white">Appointments</a>
-                <a href="index.php" class="block py-2 text-gray-400 hover:text-white border-t border-gray-800 pt-4">View Site</a>
-            </nav>
-        </aside>
+        <?php include 'includes/admin_sidebar.php'; ?>
 
         <!-- Content -->
         <main class="flex-1 p-10">
@@ -156,11 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Category</label>
-                        <select name="category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                            <option value="">Select a Category (Optional)</option>
-                            <?php foreach($categories as $cat): ?>
-                                <option value="<?= $cat['id'] ?>" <?= $service['category_id'] == $cat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($cat['name']) ?></option>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Device Category</label>
+                        <select name="device_category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">Select a Device Category (Optional)</option>
+                            <?php foreach($device_categories as $dc): ?>
+                                <option value="<?= $dc['id'] ?>" <?= $service['device_category_id'] == $dc['id'] ? 'selected' : '' ?>><?= htmlspecialchars($dc['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
