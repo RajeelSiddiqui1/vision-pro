@@ -91,11 +91,11 @@ if ($specific_model) {
     $sidebar_items = $pdo->query("SELECT * FROM categories WHERE parent_id IS NULL ORDER BY name ASC")->fetchAll();
 }
 
-// 4. Build Product Query
+// 4. Build Accessory Query
 $query = "SELECT p.*, c.name as category_name, b.name as brand_name FROM products p 
           LEFT JOIN categories c ON p.category_id = c.id 
           LEFT JOIN brands b ON p.brand_id = b.id 
-          WHERE p.type = 'product'";
+          WHERE 1=1 AND p.type = 'accessory'";
 $params = [];
 
 if ($brand_id) {
@@ -107,8 +107,8 @@ if ($part_id) {
     $query .= " AND p.category_id = ?";
     $params[] = $part_id;
 } elseif ($category_id) {
-    // If specific model selected, show its direct products AND products of its parts (Level 3)
-    // If model group selected, show products of all its models (Level 2) and their parts (Level 3)
+    // If specific model selected, show its direct accessories AND accessories of its parts (Level 3)
+    // If model group selected, show accessories of all its models (Level 2) and their parts (Level 3)
     $query .= " AND (p.category_id = ? OR c.parent_id = ? OR c.parent_id IN (SELECT id FROM categories WHERE parent_id = ?))";
     $params[] = $category_id;
     $params[] = $category_id;
@@ -130,14 +130,14 @@ switch ($sort) {
 
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
-$products = $stmt->fetchAll();
+$accessories = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - VisionPro</title>
+    <title>Accessories - VisionPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -184,7 +184,7 @@ $products = $stmt->fetchAll();
                     <?php elseif ($selected_brand): ?>
                         <?= htmlspecialchars($selected_brand['name']) ?> <span class="text-primary-600">Inventory</span>
                     <?php else: ?>
-                        Our <span class="text-primary-600">Products</span>
+                        Our <span class="text-primary-600">Accessories</span>
                     <?php endif; ?>
                 </h1>
                 
@@ -207,7 +207,7 @@ $products = $stmt->fetchAll();
                     <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6"><?= $sidebar_title ?></h3>
                     <div class="space-y-1">
                         <?php 
-                        $all_url = "products.php";
+                        $all_url = "accessories.php";
                         if ($brand_id && !$model_group) {
                             $all_url .= "?brand_id=$brand_id";
                         } elseif ($model_group && !$specific_model) {
@@ -225,15 +225,15 @@ $products = $stmt->fetchAll();
                         ?>
                         <a href="<?= $all_url ?>" 
                            class="group flex items-center justify-between py-3 px-4 rounded-lg transition-all <?= $is_all_active ? 'bg-primary-50 text-primary-700 font-bold' : 'text-gray-500 hover:bg-gray-50 font-bold' ?>">
-                            <span class="text-sm">All <?= $sidebar_title == 'Departments' ? 'Products' : 'Items' ?></span>
+                            <span class="text-sm">All <?= $sidebar_title == 'Departments' ? 'Accessories' : 'Items' ?></span>
                         </a>
 
                         <?php foreach($sidebar_items as $item): 
                             $isActive = ($category_id == $item['id'] || $part_id == $item['id']);
                             
-                            $link = "products.php?category_id=" . $item['id'];
+                            $link = "accessories.php?category_id=" . $item['id'];
                             if ($specific_model) {
-                                $link = "products.php?part_id=" . $item['id'] . "&category_id=" . $specific_model['id'];
+                                $link = "accessories.php?part_id=" . $item['id'] . "&category_id=" . $specific_model['id'];
                             }
                             if ($brand_id) {
                                 $link .= "&brand_id=$brand_id";
@@ -256,7 +256,7 @@ $products = $stmt->fetchAll();
                         $brand_sidebar = $pdo->query("SELECT * FROM brands WHERE is_active = 1 ORDER BY name ASC LIMIT 6")->fetchAll();
                         foreach($brand_sidebar as $b): 
                         ?>
-                        <a href="products.php?brand_id=<?= $b['id'] ?>" class="flex flex-col items-center gap-2 p-4 theme-inset hover:theme-card transition-all text-center group">
+                        <a href="accessories.php?brand_id=<?= $b['id'] ?>" class="flex flex-col items-center gap-2 p-4 theme-inset hover:theme-card transition-all text-center group">
                             <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[10px] font-bold text-gray-400 shadow-sm group-hover:text-primary-600 transition-colors">
                                 <?= substr($b['name'], 0, 1) ?>
                             </div>
@@ -287,24 +287,24 @@ $products = $stmt->fetchAll();
                 </div>
             </aside>
 
-            <!-- Product Grid -->
+            <!-- Accessory Grid -->
             <div class="flex-1">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                     <h1 class="text-2xl font-bold text-gray-900">
                         <?php if ($selected_category && $selected_brand): ?>
                             <?= htmlspecialchars($selected_brand['name']) ?> - <?= htmlspecialchars($selected_category['name']) ?>
                         <?php elseif ($selected_brand): ?>
-                            <?= htmlspecialchars($selected_brand['name']) ?> Products
+                            <?= htmlspecialchars($selected_brand['name']) ?> Accessories
                         <?php elseif ($selected_category): ?>
                             <?= htmlspecialchars($selected_category['name']) ?>
                         <?php else: ?>
-                            All Products
+                            All Accessories
                         <?php endif; ?>
-                        <span class="text-sm font-normal text-gray-500 ml-2">(<?= count($products) ?> items)</span>
+                        <span class="text-sm font-normal text-gray-500 ml-2">(<?= count($accessories) ?> items)</span>
                     </h1>
                     <div class="flex items-center gap-4">
                         <label class="text-sm text-gray-500 font-bold">Sort by:</label>
-                        <select onchange="window.location.href='products.php?<?= http_build_query(array_merge($_GET, ['sort' => ''])) ?>' + this.value" class="bg-white border text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-primary-500 font-medium">
+                        <select onchange="window.location.href='accessories.php?<?= http_build_query(array_merge($_GET, ['sort' => ''])) ?>' + this.value" class="bg-white border text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-primary-500 font-medium">
                             <option value="newest" <?= $sort == 'newest' ? 'selected' : '' ?>>Newest Arrivals</option>
                             <option value="price_low" <?= $sort == 'price_low' ? 'selected' : '' ?>>Price: Low to High</option>
                             <option value="price_high" <?= $sort == 'price_high' ? 'selected' : '' ?>>Price: High to Low</option>
@@ -313,17 +313,17 @@ $products = $stmt->fetchAll();
                     </div>
                 </div>
 
-                <?php if (empty($products)): ?>
+                <?php if (empty($accessories)): ?>
                 <div class="theme-card p-20 text-center">
                     <div class="text-6xl mb-4">🔎</div>
-                    <h3 class="text-xl font-bold text-gray-900">No products found</h3>
+                    <h3 class="text-xl font-bold text-gray-900">No accessories found</h3>
                     <p class="text-gray-500 mt-2">Try adjusting your filters or search terms.</p>
                 </div>
                 <?php else: ?>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    <?php foreach($products as $p): ?>
+                    <?php foreach($accessories as $p): ?>
                     <div class="group theme-card flex flex-col relative overflow-hidden transition-all duration-300 transform hover:-translate-y-2">
-                        <a href="product-detail.php?id=<?= $p['id'] ?>" class="absolute inset-0 z-10"><span class="sr-only">View Product</span></a>
+                        <a href="accessory-detail.php?id=<?= $p['id'] ?>" class="absolute inset-0 z-10"><span class="sr-only">View Accessory</span></a>
                         
                         <!-- Image Container -->
                         <div class="relative h-60 theme-inset overflow-hidden m-4 flex flex-col items-center justify-center p-6 bg-white">
@@ -340,7 +340,7 @@ $products = $stmt->fetchAll();
                             <div class="absolute inset-0 bg-primary-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                         </div>
 
-                        <!-- Product Info -->
+                        <!-- Accessory Info -->
                         <div class="px-8 pb-8 pt-2 text-center flex-1 flex flex-col">
                             <div class="text-[10px] text-primary-600 font-black uppercase tracking-[0.2em] mb-3">
                                 <?= htmlspecialchars($p['category_name']) ?>

@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle image upload
     $image_url = '';
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = 'assets/images/products/';
+        $upload_dir = 'assets/images/accessories/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755, true);
         }
@@ -66,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bulk_pricing = $_POST['bulk_pricing']; // Store as JSON string
 
     if (empty($error) && $image_url) {
-        $stmt = $pdo->prepare("INSERT INTO products (name, slug, category_id, brand_id, price, sku, part_number, stock_quantity, description, main_image, quality_tier, warranty, compatibility, bulk_pricing) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO products (type, name, slug, category_id, brand_id, price, sku, part_number, stock_quantity, description, main_image, quality_tier, warranty, compatibility, bulk_pricing) VALUES ('accessory', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         if ($stmt->execute([$name, $slug, $category_id, $brand_id, $price, $sku, $part_number, $stock, $description, $image_url, $quality_tier, $warranty, $compatibility, $bulk_pricing])) {
-            header("Location: admin-products.php?success=1");
+            header("Location: admin-accessories.php?success=1");
             exit;
         } else {
-            $error = "Failed to add product.";
+            $error = "Failed to add accessory.";
         }
     }
 }
@@ -89,7 +89,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product - Admin</title>
+    <title>Add Accessory - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <script>
@@ -150,8 +150,8 @@ try {
 
         <main class="flex-1 p-10">
             <header class="mb-10 flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Add New <span class="text-primary-600">Product</span></h1>
-                <a href="admin-products.php" class="bg-white px-6 py-3 rounded-xl text-xs font-black text-gray-500 hover:text-primary-600 tracking-widest uppercase border border-gray-100 shadow-sm transition-all">← Back to List</a>
+                <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Add New <span class="text-primary-600">Accessory</span></h1>
+                <a href="admin-accessories.php" class="bg-white px-6 py-3 rounded-xl text-xs font-black text-gray-500 hover:text-primary-600 tracking-widest uppercase border border-gray-100 shadow-sm transition-all">← Back to List</a>
             </header>
 
             <?php if ($error): ?>
@@ -164,10 +164,10 @@ try {
             <div class="bg-white rounded-[3rem] shadow-sm border border-gray-200 p-12 max-w-5xl relative overflow-hidden">
                 <div class="absolute -right-24 -top-24 w-80 h-80 bg-primary-50 rounded-full blur-3xl opacity-50"></div>
                 
-                <form action="admin-product-add.php" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-12 relative">
+                <form action="admin-accessory-add.php" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-12 relative">
                     <div class="space-y-8">
                         <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Product Name</label>
+                            <label class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Accessory Name</label>
                             <input type="text" name="name" required placeholder="e.g. iPhone 16 OLED Premium Display" class="w-full px-6 py-4 bg-gray-50 border-0 rounded-2xl outline-none focus:ring-2 focus:ring-primary-500 font-bold text-gray-700 transition-all">
                         </div>
 
@@ -198,7 +198,7 @@ try {
                                 <select id="subcategory_id" name="category_id" required class="w-full px-4 py-3 bg-white border border-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-primary-500 font-bold text-gray-700">
                                     <option value="">Select Specific Model</option>
                                 </select>
-                                <p class="text-[9px] text-gray-400 mt-2 font-bold italic tracking-wide text-center">Selected Model will become the Product's Primary Category.</p>
+                                <p class="text-[9px] text-gray-400 mt-2 font-bold italic tracking-wide text-center">Selected Model will become the Accessory's Primary Category.</p>
                             </div>
                         </div>
 
@@ -216,7 +216,7 @@ try {
 
                     <div class="space-y-8">
                         <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Product Visual</label>
+                            <label class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Accessory Visual</label>
                             <div class="relative group">
                             <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                             <div class="w-full px-6 py-10 border-2 border-dashed border-gray-200 rounded-[2rem] flex flex-col items-center justify-center gap-3 group-hover:bg-gray-50 group-hover:border-primary-300 transition-all">

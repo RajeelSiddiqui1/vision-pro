@@ -12,6 +12,7 @@ function getIcon($page) {
     $icons = [
         'admin' => 'ri-dashboard-3-line',
         'admin-products' => 'ri-shopping-bag-3-line',
+        'admin-accessories' => 'ri-headphone-line',
         'admin-product-add' => 'ri-add-box-line',
         'admin-product-edit' => 'ri-edit-box-line',
         'admin-brands' => 'ri-medal-line',
@@ -52,6 +53,11 @@ function getIcon($page) {
         <a href="admin-products.php" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group <?= isActive('admin-products', $current_page) ?> <?= isActive('admin-product-add', $current_page) ?> <?= isActive('admin-product-edit', $current_page) ?>">
             <i class="<?= getIcon('admin-products') ?> text-lg"></i>
             <span class="text-sm font-bold tracking-tight">Product Gallery</span>
+        </a>
+
+        <a href="admin-accessories.php" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group <?= isActive('admin-accessories', $current_page) ?> <?= isActive('admin-accessory-add', $current_page) ?> <?= isActive('admin-accessory-edit', $current_page) ?>">
+            <i class="<?= getIcon('admin-accessories') ?> text-lg"></i>
+            <span class="text-sm font-bold tracking-tight">Accessory Gallery</span>
         </a>
 
         <a href="admin-orders.php" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group <?= isActive('admin-orders', $current_page) ?> <?= isActive('admin-order-details', $current_page) ?>">

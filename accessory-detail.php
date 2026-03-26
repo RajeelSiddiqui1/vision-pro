@@ -6,21 +6,21 @@ $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 $stmt = $pdo->prepare("SELECT p.*, c.name as category_name FROM products p JOIN categories c ON p.category_id = c.id WHERE p.id = ?");
 $stmt->execute([$id]);
-$product = $stmt->fetch();
+$accessory = $stmt->fetch();
 
-if (!$product) {
-    header("Location: products.php");
+if (!$accessory) {
+    header("Location: accessories.php");
     exit;
 }
 
-if ($product['type'] === 'accessory') {
-    header("Location: accessory-detail.php?id=" . $id);
+if ($accessory['type'] === 'product') {
+    header("Location: product-detail.php?id=" . $id);
     exit;
 }
 
-// Get related products
-$rel_stmt = $pdo->prepare("SELECT * FROM products WHERE category_id = ? AND id != ? LIMIT 4");
-$rel_stmt->execute([$product['category_id'], $id]);
+// Get related accessories
+$rel_stmt = $pdo->prepare("SELECT * FROM products WHERE category_id = ? AND id != ? AND type = 'accessory' LIMIT 4");
+$rel_stmt->execute([$accessory['category_id'], $id]);
 $related = $rel_stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -28,7 +28,7 @@ $related = $rel_stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $product['name'] ?> - VisionPro</title>
+    <title><?= $accessory['name'] ?> - VisionPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -47,51 +47,51 @@ $related = $rel_stmt->fetchAll();
             <ol class="flex items-center space-x-2">
                 <li><a href="index.php" class="hover:text-primary-600">Home</a></li>
                 <li><svg class="h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg></li>
-                <li><a href="products.php" class="hover:text-primary-600">Products</a></li>
+                <li><a href="accessories.php" class="hover:text-primary-600">Accessories</a></li>
                 <li><svg class="h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg></li>
-                <li class="font-bold text-gray-900"><?= $product['name'] ?></li>
+                <li class="font-bold text-gray-900"><?= $accessory['name'] ?></li>
             </ol>
         </nav>
 
         <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
             <div class="flex flex-col lg:flex-row">
-                <!-- Product Gallery -->
+                <!-- Accessory Gallery -->
                 <div class="lg:w-1/2 p-12 bg-gray-50 flex items-center justify-center min-h-[400px] lg:min-h-[600px]">
                     <div class="relative w-full h-full flex items-center justify-center">
-                        <img src="<?= $product['main_image'] ?: 'https://via.placeholder.com/600x600?text=No+Image' ?>" 
-                             alt="<?= $product['name'] ?>" 
+                        <img src="<?= $accessory['main_image'] ?: 'https://via.placeholder.com/600x600?text=No+Image' ?>" 
+                             alt="<?= $accessory['name'] ?>" 
                              class="max-w-full max-h-[500px] object-contain rounded-3xl shadow-2xl transition-all duration-500 hover:scale-110">
                     </div>
                 </div>
 
-                <!-- Product Info -->
+                <!-- Accessory Info -->
                 <div class="lg:w-1/2 p-12 lg:border-l border-gray-100">
                     <div class="mb-4 flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-primary-100 text-primary-700 text-xs font-bold rounded-full uppercase tracking-widest"><?= $product['category_name'] ?></span>
-                        <span class="px-3 py-1 bg-primary-600 text-white text-xs font-bold rounded-full uppercase tracking-widest glow-primary"><?= $product['quality_tier'] ?: 'Premium' ?></span>
-                        <?php if($product['stock_quantity'] > 0): ?>
+                        <span class="px-3 py-1 bg-primary-100 text-primary-700 text-xs font-bold rounded-full uppercase tracking-widest"><?= $accessory['category_name'] ?></span>
+                        <span class="px-3 py-1 bg-primary-600 text-white text-xs font-bold rounded-full uppercase tracking-widest glow-primary"><?= $accessory['quality_tier'] ?: 'Premium' ?></span>
+                        <?php if($accessory['stock_quantity'] > 0): ?>
                         <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full uppercase tracking-widest italic">In Stock</span>
                         <?php endif; ?>
                     </div>
                     
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4 leading-tight"><?= $product['name'] ?></h1>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4 leading-tight"><?= $accessory['name'] ?></h1>
                     
                     <div class="flex items-center gap-4 mb-8">
-                        <?php if($product['discount_price']): ?>
-                        <span class="text-3xl font-bold text-gray-900">$<?= number_format($product['discount_price'], 2) ?></span>
-                        <span class="text-lg text-gray-400 line-through">$<?= number_format($product['price'], 2) ?></span>
+                        <?php if($accessory['discount_price']): ?>
+                        <span class="text-3xl font-bold text-gray-900">$<?= number_format($accessory['discount_price'], 2) ?></span>
+                        <span class="text-lg text-gray-400 line-through">$<?= number_format($accessory['price'], 2) ?></span>
                         <?php else: ?>
-                        <span class="text-3xl font-bold text-gray-900">$<?= number_format($product['price'], 2) ?></span>
+                        <span class="text-3xl font-bold text-gray-900">$<?= number_format($accessory['price'], 2) ?></span>
                         <?php endif; ?>
                     </div>
 
                     <p class="text-gray-600 mb-6 leading-loose text-lg">
-                        <?= $product['description'] ?>
+                        <?= $accessory['description'] ?>
                     </p>
 
                     <!-- Bulk Pricing Table -->
                     <?php 
-                    $bulk = json_decode($product['bulk_pricing'], true);
+                    $bulk = json_decode($accessory['bulk_pricing'], true);
                     if ($bulk && count($bulk) > 0): 
                     ?>
                     <div class="mb-8 overflow-hidden rounded-2xl border border-primary-100">
@@ -109,7 +109,7 @@ $related = $rel_stmt->fetchAll();
                                     <td class="px-4 py-3 font-bold text-gray-700"><?= $tier['qty'] ?>+ Units</td>
                                     <td class="px-4 py-3 text-right font-bold text-primary-600">$<?= number_format($tier['price'], 2) ?></td>
                                     <td class="px-4 py-3 text-right text-green-600 font-bold">
-                                        Save <?= round((1 - ($tier['price'] / $product['price'])) * 100) ?>%
+                                        Save <?= round((1 - ($tier['price'] / $accessory['price'])) * 100) ?>%
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -124,7 +124,7 @@ $related = $rel_stmt->fetchAll();
                             <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">🛡️</div>
                             <div>
                                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Warranty</p>
-                                <p class="text-sm font-bold text-gray-800"><?= $product['warranty'] ?: 'Lifetime Warranty' ?></p>
+                                <p class="text-sm font-bold text-gray-800"><?= $accessory['warranty'] ?: 'Lifetime Warranty' ?></p>
                             </div>
                         </div>
                         <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-4">
@@ -136,14 +136,14 @@ $related = $rel_stmt->fetchAll();
                         </div>
                     </div>
 
-                    <?php if($product['compatibility']): ?>
+                    <?php if($accessory['compatibility']): ?>
                     <div class="mb-8 p-6 bg-primary-50 rounded-2xl border border-primary-100">
                         <h4 class="text-xs font-bold text-primary-700 uppercase tracking-widest mb-3 flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                             Compatibility
                         </h4>
                         <p class="text-sm text-primary-900 font-medium leading-relaxed">
-                            <?= $product['compatibility'] ?>
+                            <?= $accessory['compatibility'] ?>
                         </p>
                     </div>
                     <?php endif; ?>
@@ -152,27 +152,27 @@ $related = $rel_stmt->fetchAll();
                         <div class="bg-gray-50 p-6 rounded-2xl flex flex-wrap gap-8 items-center">
                             <div>
                                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">SKU</p>
-                                <p class="text-sm font-bold text-gray-800 tracking-wider"><?= $product['sku'] ?></p>
+                                <p class="text-sm font-bold text-gray-800 tracking-wider"><?= $accessory['sku'] ?></p>
                             </div>
-                            <?php if($product['part_number']): ?>
+                            <?php if($accessory['part_number']): ?>
                             <div class="pl-8 border-l border-gray-200">
                                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Part Number</p>
-                                <p class="text-sm font-bold text-gray-800 tracking-wider"><?= $product['part_number'] ?></p>
+                                <p class="text-sm font-bold text-gray-800 tracking-wider"><?= $accessory['part_number'] ?></p>
                             </div>
                             <?php endif; ?>
                             <div class="pl-8 border-l border-gray-200">
                                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">In Stock</p>
-                                <p class="text-sm font-bold text-gray-800"><?= $product['stock_quantity'] ?> Units</p>
+                                <p class="text-sm font-bold text-gray-800"><?= $accessory['stock_quantity'] ?> Units</p>
                             </div>
                         </div>
 
                         <form action="cart_action.php" method="POST" class="flex flex-col sm:flex-row gap-4">
-                            <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                            <input type="hidden" name="product_id" value="<?= $accessory['id'] ?>">
                             <input type="hidden" name="action" value="add">
                             
                             <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden">
                                 <button type="button" onclick="this.nextElementSibling.stepDown()" class="px-4 py-3 hover:bg-gray-100 text-gray-600 transition-colors">-</button>
-                                <input type="number" name="quantity" value="1" min="1" max="<?= $product['stock_quantity'] ?>" class="w-16 text-center border-none outline-none font-bold">
+                                <input type="number" name="quantity" value="1" min="1" max="<?= $accessory['stock_quantity'] ?>" class="w-16 text-center border-none outline-none font-bold">
                                 <button type="button" onclick="this.previousElementSibling.stepUp()" class="px-4 py-3 hover:bg-gray-100 text-gray-600 transition-colors">+</button>
                             </div>
 
@@ -186,13 +186,13 @@ $related = $rel_stmt->fetchAll();
             </div>
         </div>
 
-        <!-- Related Products -->
+        <!-- Related Accessories -->
         <?php if($related): ?>
         <section class="mt-20">
-            <h2 class="text-2xl font-bold mb-8">Related Products</h2>
+            <h2 class="text-2xl font-bold mb-8">Related Accessories</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php foreach($related as $rel): ?>
-                <a href="product-detail.php?id=<?= $rel['id'] ?>" class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all">
+                <a href="accessory-detail.php?id=<?= $rel['id'] ?>" class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all">
                     <div class="aspect-square bg-gray-50 flex items-center justify-center p-4">
                         <img src="<?= $rel['main_image'] ?: 'https://via.placeholder.com/300' ?>" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
                     </div>

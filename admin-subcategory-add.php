@@ -24,19 +24,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
         
-        if (in_array($file_ext, $allowed_ext)) {
-            $new_filename = 'sub-' . $slug . '-' . time() . '.' . $file_ext;
-            $upload_path = $upload_dir . $new_filename;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
-                $image_url = $upload_path;
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $_FILES['image']['tmp_name']);
+        finfo_close($finfo);
+        
+        $allowed_mimes = ['image/jpeg', 'image/png', 'image/webp'];
+
+        if (in_array($file_ext, $allowed_ext) && in_array($mime_type, $allowed_mimes)) {
+            if ($_FILES['image']['size'] <= 5 * 1024 * 1024) { // 5MB limit
+                $new_filename = 'sub-' . $slug . '-' . time() . '.' . $file_ext;
+                $upload_path = $upload_dir . $new_filename;
+                
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
+                    $image_url = $upload_path;
+                } else {
+                    $error = "Failed to upload image.";
+                }
             } else {
-                $error = "Failed to upload image.";
+                $error = "Image size exceeds the 5MB limit.";
             }
         } else {
-            $error = "Invalid image format. Allowed: jpg, jpeg, png, gif, webp";
+            $error = "Invalid image format. Only JPG, PNG, and WEBP are allowed.";
         }
     } else {
         $error = "Please select an image.";
@@ -144,10 +154,10 @@ $brands = $pdo->query("SELECT id, name FROM brands WHERE is_active = 1 ORDER BY 
                     <div>
                         <label class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Visual Asset</label>
                         <div class="relative group">
-                            <input type="file" name="image" accept="image/*" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                             <div class="w-full px-6 py-8 border-2 border-dashed border-gray-200 rounded-3xl flex flex-col items-center justify-center gap-3 group-hover:bg-gray-50 group-hover:border-primary-300 transition-all">
                                 <i class="ri-image-add-line text-3xl text-gray-300 group-hover:text-primary-500"></i>
-                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Select specific model image</span>
+                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Select specific model image<br>Allowed: <span class="text-primary-600">JPG, PNG, WEBP</span> (Max 5MB)</span>
                             </div>
                         </div>
                     </div>

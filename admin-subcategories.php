@@ -197,7 +197,7 @@ $groups = $pdo->query("SELECT id, name FROM categories WHERE parent_id IS NULL O
                             <td class="px-4 py-5 text-[9px] font-bold text-gray-400 uppercase tracking-widest italic"><?= htmlspecialchars($sub['slug']) ?></td>
                             <td class="px-4 py-5 text-right">
                                 <div class="flex justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <a href="admin-category-edit.php?id=<?= $sub['id'] ?>" class="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-all">
+                                    <a href="admin-subcategory-edit.php?id=<?= $sub['id'] ?>" class="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center hover:bg-primary-600 hover:text-white transition-all shadow-lg shadow-primary-500/5">
                                         <i class="ri-edit-line text-base"></i>
                                     </a>
                                 </div>
@@ -207,6 +207,40 @@ $groups = $pdo->query("SELECT id, name FROM categories WHERE parent_id IS NULL O
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
+            <?php if ($total_pages > 1): ?>
+                <div class="flex justify-between items-center mt-8 px-4">
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Showing <?= $offset + 1 ?>-<?= min($offset + $limit, $total_subcategories) ?> of <?= $total_subcategories ?> specific models
+                    </p>
+                    <div class="flex gap-2">
+                        <?php if ($page > 1): ?>
+                            <a href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>&brand=<?= $brand_filter ?>&group=<?= $group_filter ?>" 
+                               class="w-10 h-10 bg-white border border-gray-100 rounded-xl flex items-center justify-center text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-all shadow-sm">
+                                <i class="ri-arrow-left-s-line text-xl"></i>
+                            </a>
+                        <?php endif; ?>
+
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                            <a href="?page=<?= $i ?>&search=<?= urlencode($search) ?>&brand=<?= $brand_filter ?>&group=<?= $group_filter ?>" 
+                               class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-all shadow-sm
+                                      <?= $i == $page 
+                                          ? 'bg-primary-600 text-white' 
+                                          : 'bg-white border border-gray-100 text-gray-500 hover:bg-gray-50' ?>">
+                                <?= $i ?>
+                            </a>
+                        <?php endfor; ?>
+
+                        <?php if ($page < $total_pages): ?>
+                            <a href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>&brand=<?= $brand_filter ?>&group=<?= $group_filter ?>" 
+                               class="w-10 h-10 bg-white border border-gray-100 rounded-xl flex items-center justify-center text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-all shadow-sm">
+                                <i class="ri-arrow-right-s-line text-xl"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         </main>
     </div>
 </body>

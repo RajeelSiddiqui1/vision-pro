@@ -16,7 +16,7 @@
                 <!-- Brands Dropdown -->
                 <div class="relative group">
                     <a href="brands.php" class="text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors flex items-center gap-1">
-                        Brands
+                        Parts
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </a>
                     <div class="absolute top-full left-0 w-56 pt-4 z-50 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
@@ -28,7 +28,7 @@
                             <a href="categories.php?brand_id=<?= $hb['id'] ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors"><?= htmlspecialchars($hb['name']) ?></a>
                             <?php endforeach; ?>
                             <hr class="border-gray-100 my-2">
-                            <a href="brands.php" class="block text-xs font-bold text-center text-primary-600 hover:underline uppercase tracking-widest py-1">All Brands →</a>
+                            <a href="brands.php" class="block text-xs font-bold text-center text-primary-600 hover:underline uppercase tracking-widest py-1">All Parts →</a>
                         </div>
                     </div>
                 </div>
@@ -62,6 +62,7 @@
                 </div>
 
                 <a href="products.php" class="text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors">Inventory</a>
+                <a href="accessories.php" class="text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors">Accessories</a>
 
                 <a href="services.php" class="text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors">Services</a>
                 <a href="blog.php" class="text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors">Blog</a>
@@ -166,6 +167,9 @@
             </a>
             <a href="products.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-primary-50 hover:text-primary-600 font-medium transition-all">
                 📦 Full Inventory
+            </a>
+            <a href="accessories.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-primary-50 hover:text-primary-600 font-medium transition-all">
+                🎧 Accessories
             </a>
             <a href="services.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-primary-50 hover:text-primary-600 font-medium transition-all">
                 🔧 Services

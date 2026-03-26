@@ -10,7 +10,7 @@ no_cache_headers();
 
 $success = '';
 if (isset($_GET['success'])) {
-    $success = "Product added successfully!";
+    $success = "Accessory added successfully!";
 }
 
 // Handle Delete
@@ -19,9 +19,9 @@ if (isset($_GET['delete'])) {
     $msg = "";
     
     // Check for dependencies (Order Items)
-    // We try to see if order_items table exists and if it has this product
+    // We try to see if order_items table exists and if it has this accessory
     try {
-        $deps = $pdo->prepare("SELECT COUNT(*) FROM order_items WHERE product_id = ?");
+        $deps = $pdo->prepare("SELECT COUNT(*) FROM order_items WHERE accessory_id = ?");
         $deps->execute([$id]);
         if ($deps->fetchColumn() > 0) {
             $msg = "?error=has_orders";
@@ -40,7 +40,7 @@ if (isset($_GET['delete'])) {
             $msg = "?error=db_error";
         }
     }
-    header("Location: admin-products.php" . $msg);
+    header("Location: admin-accessories.php" . $msg);
     exit;
 }
 
@@ -56,7 +56,7 @@ $sort = isset($_GET['sort']) ? $_GET['sort'] : 'created_at';
 $order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'ASC' : 'DESC';
 
 $params = [];
-$where_clauses = ["p.type = 'product'"];
+$where_clauses = ["p.type = 'accessory'"];
 
 if ($search) {
     $where_clauses[] = "(p.name LIKE ? OR p.sku LIKE ?)";
@@ -79,10 +79,10 @@ if (!in_array($sort, $allowed_sorts)) $sort = 'created_at';
 // Get Total Count for Pagination
 $count_stmt = $pdo->prepare("SELECT COUNT(*) FROM products p $where_sql");
 $count_stmt->execute($params);
-$total_products = $count_stmt->fetchColumn();
-$total_pages = ceil($total_products / $limit);
+$total_accessories = $count_stmt->fetchColumn();
+$total_pages = ceil($total_accessories / $limit);
 
-// Get Products
+// Get Accessories
 $query = "SELECT p.*, c.name as category_name 
           FROM products p 
           JOIN categories c ON p.category_id = c.id 
@@ -91,7 +91,7 @@ $query = "SELECT p.*, c.name as category_name
           LIMIT $limit OFFSET $offset";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
-$products = $stmt->fetchAll();
+$accessories = $stmt->fetchAll();
 
 // Get Categories for filter
 $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->fetchAll();
@@ -101,7 +101,7 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Products - VisionPro</title>
+    <title>Manage Accessories - VisionPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -150,12 +150,12 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
             <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
                 <div class="relative">
                     <div class="absolute -left-4 top-0 bottom-0 w-1 bg-primary-500 rounded-full"></div>
-                    <h1 class="text-3xl lg:text-4xl font-black tracking-tighter text-gray-900 mb-1">Product <span class="gradient-text">Gallery</span></h1>
+                    <h1 class="text-3xl lg:text-4xl font-black tracking-tighter text-gray-900 mb-1">Accessory <span class="gradient-text">Gallery</span></h1>
                     <p class="text-gray-500 font-bold uppercase tracking-widest text-[9px]">Inventory & Stock Management</p>
                 </div>
-                <a href="admin-product-add.php" class="bg-primary-600 text-white px-6 py-3 rounded-2xl font-black text-xs shadow-xl shadow-primary-500/20 hover:bg-primary-700 transition-all flex items-center gap-2">
+                <a href="admin-accessory-add.php" class="bg-primary-600 text-white px-6 py-3 rounded-2xl font-black text-xs shadow-xl shadow-primary-500/20 hover:bg-primary-700 transition-all flex items-center gap-2">
                     <i class="ri-add-circle-line text-lg"></i>
-                    Add New Product
+                    Add New Accessory
                 </a>
             </header>
 
@@ -195,7 +195,7 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
                     </button>
 
                     <?php if($search || $category_filter || $sort != 'created_at'): ?>
-                        <a href="admin-products.php" class="bg-gray-100 text-gray-500 px-6 py-3.5 rounded-2xl font-black text-sm hover:bg-gray-200 transition-all flex items-center justify-center">
+                        <a href="admin-accessories.php" class="bg-gray-100 text-gray-500 px-6 py-3.5 rounded-2xl font-black text-sm hover:bg-gray-200 transition-all flex items-center justify-center">
                             Reset
                         </a>
                     <?php endif; ?>
@@ -206,7 +206,7 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
                 <table class="w-full text-left">
                     <thead class="bg-gray-50/50 border-b border-gray-100">
                         <tr>
-                            <th class="px-4 py-5 text-[9px] font-black text-gray-400 uppercase tracking-widest">Product Details</th>
+                            <th class="px-4 py-5 text-[9px] font-black text-gray-400 uppercase tracking-widest">Accessory Details</th>
                             <th class="px-4 py-5 text-[9px] font-black text-gray-400 uppercase tracking-widest">Category</th>
                             <th class="px-4 py-5 text-[9px] font-black text-gray-400 uppercase tracking-widest">Market Price</th>
                             <th class="px-4 py-5 text-[9px] font-black text-gray-400 uppercase tracking-widest">Stock Level</th>
@@ -215,7 +215,7 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
-                        <?php foreach($products as $p): ?>
+                        <?php foreach($accessories as $p): ?>
                         <tr class="hover:bg-gray-50/50 transition-colors group">
                             <td class="px-4 py-5">
                                 <div class="flex items-center gap-4">
@@ -249,17 +249,17 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
                                 <label class="relative inline-flex items-center cursor-pointer group/toggle scale-90">
                                     <input type="checkbox" class="sr-only peer ajax-status-toggle" 
                                            data-id="<?= $p['id'] ?>" 
-                                           data-endpoint="admin_api.php?type=product_status"
+                                           data-endpoint="admin_api.php?type=accessory_status"
                                            <?= (isset($p['is_active']) && $p['is_active']) ? 'checked' : '' ?>>
                                     <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-5 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600"></div>
                                 </label>
                             </td>
                             <td class="px-4 py-5 text-right">
                                 <div class="flex justify-end gap-1.5">
-                                    <a href="admin-product-edit.php?id=<?= $p['id'] ?>" class="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center hover:bg-primary-600 hover:text-white transition-all shadow-lg shadow-primary-500/5">
+                                    <a href="admin-accessory-edit.php?id=<?= $p['id'] ?>" class="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center hover:bg-primary-600 hover:text-white transition-all shadow-lg shadow-primary-500/5">
                                         <i class="ri-edit-line text-base"></i>
                                     </a>
-                                    <a href="admin-products.php?delete=<?= $p['id'] ?>" onclick="smartDelete(this, 'Purge Product', 'Are you sure you want to permanently remove this product from inventory? This action cannot be undone.')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-lg shadow-red-500/5">
+                                    <a href="admin-accessories.php?delete=<?= $p['id'] ?>" onclick="smartDelete(this, 'Purge Accessory', 'Are you sure you want to permanently remove this accessory from inventory? This action cannot be undone.')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-lg shadow-red-500/5">
                                         <i class="ri-delete-bin-line text-base"></i>
                                     </a>
                                 </div>
@@ -274,7 +274,7 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
             <?php if ($total_pages > 1): ?>
                 <div class="flex justify-between items-center mt-8 px-4">
                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                        Showing <?= $offset + 1 ?>-<?= min($offset + $limit, $total_products) ?> of <?= $total_products ?> products
+                        Showing <?= $offset + 1 ?>-<?= min($offset + $limit, $total_accessories) ?> of <?= $total_accessories ?> accessories
                     </p>
                     <div class="flex gap-2">
                         <?php if ($page > 1): ?>
@@ -308,14 +308,14 @@ $categories = $pdo->query("SELECT id, name FROM categories ORDER BY name ASC")->
                 </div>
             <?php endif; ?>
 
-            <?php if (empty($products)): ?>
+            <?php if (empty($accessories)): ?>
                 <div class="bg-white rounded-[2.5rem] p-24 text-center border border-dashed border-gray-200 mt-8">
                     <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                         <i class="ri-search-2-line text-3xl text-gray-300"></i>
                     </div>
-                    <h3 class="text-xl font-black text-gray-900 mb-2">No matching products found</h3>
+                    <h3 class="text-xl font-black text-gray-900 mb-2">No matching accessories found</h3>
                     <p class="text-gray-500 font-bold text-sm mb-8">Try adjusting your search filters to find what you're looking for.</p>
-                    <a href="admin-products.php" class="inline-flex items-center gap-2 text-primary-600 font-black text-sm hover:underline">
+                    <a href="admin-accessories.php" class="inline-flex items-center gap-2 text-primary-600 font-black text-sm hover:underline">
                         Clear all filters
                         <i class="ri-arrow-right-line"></i>
                     </a>
