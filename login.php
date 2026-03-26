@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Handle custom redirect (e.g. back to checkout)
         $default_redirect = ($user['role'] === 'admin') ? 'admin.php' : 'dashboard.php';
-        $redirect = !empty($_POST['redirect']) ? $_POST['redirect'] : $default_redirect;
+        $redirect = !empty($_POST['redirect']) ? sanitize_redirect($_POST['redirect'], $default_redirect) : $default_redirect;
         
         // Use JavaScript redirect to be 100% sure it works even if headers are blocked
         echo "<script>window.location.href='$redirect';</script>";
