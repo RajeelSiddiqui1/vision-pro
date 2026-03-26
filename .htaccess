@@ -32,7 +32,7 @@
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     
     # Content Security Policy
-    Header always set Content-Security-Policy "upgrade-insecure-requests"
+    # Header always set Content-Security-Policy "upgrade-insecure-requests"
 </IfModule>
 
 # Directory Browsing - Disable
@@ -101,10 +101,11 @@ DirectoryIndex index.php index.html
 # RewriteRule ^(.+)$ index.php?route=$1 [QSA,L]
 
 # Protect Session Files
-<IfModule mod_php7.c>
+<IfModule mod_php8.c>
     php_value session.cookie_httponly 1
     php_value session.use_only_cookies 1
-    php_value session.cookie_secure 1
+    # Uncomment the line below ONLY after HTTPS is configured
+    # php_value session.cookie_secure 1
 </IfModule>
 
 # =====================================================

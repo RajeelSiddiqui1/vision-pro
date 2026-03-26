@@ -34,11 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $default_redirect = ($user['role'] === 'admin') ? 'admin.php' : 'dashboard.php';
         $redirect = !empty($_POST['redirect']) ? sanitize_redirect($_POST['redirect'], $default_redirect) : $default_redirect;
         
-        // Use JavaScript redirect to be 100% sure it works even if headers are blocked
-        echo "<script>window.location.href='$redirect';</script>";
-        echo "<noscript><meta http-equiv='refresh' content='0;url=$redirect'></noscript>";
-        header("Location: $redirect");
-        exit;
+        // Final sanity check before redirect
+        if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['user_id'])) {
+            header("Location: $redirect");
+            exit;
+        } else {
+            error_log("Session failed to persist in login.php redirect.");
+            $error = "Session error. Please ensure your browser allows cookies.";
+        }
     } else {
         if (!$user) {
             $error = "Invalid email or password. (User not found)";

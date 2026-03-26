@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'config/db.php';
 require_once 'includes/auth_helper.php';
@@ -22,6 +23,6 @@ if (ini_get("session.use_cookies")) {
 
 header("Location: index.php");
 exit;
-?>
+
 
 
