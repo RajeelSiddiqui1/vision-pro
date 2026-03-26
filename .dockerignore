@@ -1,0 +1,17 @@
+.git
+.github
+.vscode
+node_modules
+vendor/bin
+composer.phar
+*.sql
+*.log
+email_log.txt
+brain/
+.gemini/
+.env
+Dockerfile
+docker-compose.yml
+tmp_*
+ACCESSORIES_DB_README.md
+SRS_DOCUMENT.md
